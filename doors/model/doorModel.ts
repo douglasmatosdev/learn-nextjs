@@ -42,7 +42,7 @@ export default class DoorModel {
     open(): DoorModel {
         const open = true
 
-        return new DoorModel(this.number, this.hasGift, this.selected, opened)
+        return new DoorModel(this.number, this.hasGift, this.selected, open)
     }
 
 }
