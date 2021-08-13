@@ -8,10 +8,20 @@ import { useRouter } from 'next/router'
 export default function Game() {
     const router = useRouter()
 
-    const [doors, setDoors] = useState(createDoors(2, 2))
+    const [isValid, setIsValid] = useState(false)
+    const [doors, setDoors] = useState([])
 
     useEffect(() => {
-       
+        const doors = +router.query.doors
+        const hasGift = +router.query.hasGift
+
+        const amountValidDoors = doors >= 3 && doors <= 100
+        const hasValidGift = hasGift >= 1 && hasGift <= doors
+
+        setIsValid(amountValidDoors && hasValidGift)
+    }, [doors, router.query.doors, router.query.hasGift])
+
+    useEffect(() => {
         const doors = +router.query.doors
         const hasGift = +router.query.hasGift
 
@@ -19,7 +29,7 @@ export default function Game() {
     }, [router?.query])
 
     function renderDoors() {
-        return doors.map(door => {
+        return isValid && doors.map(door => {
             return <Door
                 key={door.number}
                 value={door}
@@ -30,7 +40,7 @@ export default function Game() {
     return (
         <div id={styles.game}>
             <div className={styles.doors}>
-                {renderDoors()}
+                {isValid ? renderDoors() : <h1>Invalid values</h1>}
             </div>
             <div className={styles.buttons}>
                 <Link href="/" passHref>
